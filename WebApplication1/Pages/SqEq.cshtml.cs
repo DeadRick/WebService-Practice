@@ -50,6 +50,7 @@ namespace WebApplication1.Pages
                                 [FromQuery] double c)
         {
             // TODO: решаем  уравнение
+            // Костыль:
             int d = 1, x1 = 2, x2 = 3;
             if (d > 0)
                 return new JsonResult(new { x1, x2 });
