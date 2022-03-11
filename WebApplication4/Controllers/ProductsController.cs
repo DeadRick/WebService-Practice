@@ -36,5 +36,54 @@ namespace WebApplication4.Controllers
             return Ok(product);
         }
 
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            products.Remove(products.SingleOrDefault(p => p.Id == id));
+            return Ok();
+        }
+
+        private int NextProductId => products.Count() == 0 ? 1 : products.Max(x => x.Id) + 1;
+
+
+        [HttpGet("GetNextProductId")]    //  проверка: /api/GetNextProductId/
+        public int GetNextProductId()
+        {
+            return NextProductId;
+        }
+
+        [HttpPost]
+        public IActionResult Post(Product product)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            product.Id = NextProductId;
+            products.Add(product);
+            return CreatedAtAction(nameof(Get), new { id = product.Id }, product);
+        }
+
+        [HttpPost("AddProduct")]
+        public IActionResult PostBody([FromBody] Product product) =>
+            Post(product);
+
+        [HttpPut]
+        public IActionResult Put(Product product)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var storedProduct = products.SingleOrDefault(p => p.Id == product.Id);
+            if (storedProduct == null) return NotFound();
+            storedProduct.Name = product.Name;
+            storedProduct.Price = product.Price;
+            return Ok(storedProduct);
+        }
+
+        [HttpPut("PutProduct")]
+        public IActionResult PutBody([FromBody] Product product) => Put(product);
+
     }
 }
