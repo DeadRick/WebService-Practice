@@ -25,6 +25,13 @@ namespace WebApi.Controllers
                 UserName = req.UserName
             };
 
+            var checkUnique = _storage.Users.SingleOrDefault(p => p.Email == user.Email);
+
+            if (checkUnique != null)
+            {
+                return BadRequest($"Пользователь с {user.Email} уже существует.");
+            }
+
             _storage.Users.Add(user);
             return Ok(user);
         }
