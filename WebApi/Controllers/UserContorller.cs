@@ -9,8 +9,6 @@ namespace WebApi.Controllers
     public class UserContorller : Controller
     {
         private Storage _storage;
-        private static List<UserInfo> _users = new List<UserInfo>();
-
 
         public UserContorller(Storage storage)
         {
@@ -22,20 +20,19 @@ namespace WebApi.Controllers
         {
             var user = new UserInfo()
             {
-                Id = _users.Count + 1,
+                Id = _storage.Users.Count + 1,
                 Email = req.Email,
                 UserName = req.UserName
             };
 
             _storage.Users.Add(user);
-            _users.Add(user);
             return Ok(user);
         }
 
         [HttpGet("get-user-by-id")]
         public IActionResult GetUserById([FromBody] int id)
         {
-            var result = _users.SingleOrDefault(p => p.Id == id);
+            var result = _storage.Users.SingleOrDefault(p => p.Id == id);
 
             if (result == null)
             {
@@ -47,7 +44,7 @@ namespace WebApi.Controllers
         [HttpGet("get-all-users")]
         public IActionResult GetAllUsers()
         {
-            return Ok(_users);
+            return Ok(_storage.Users);
         }
     }
 }

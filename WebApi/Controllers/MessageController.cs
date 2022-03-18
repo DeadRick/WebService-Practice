@@ -8,7 +8,6 @@ namespace WebApi.Controllers
     public class MessageController : Controller
     {
         private Storage _storage;
-        private List<MessageInfo> messages = new List<MessageInfo>();
 
         public MessageController(Storage storage)
         {
@@ -41,7 +40,7 @@ namespace WebApi.Controllers
         {
             List<MessageInfo> messagesList = new();
 
-            foreach (var message in messages)
+            foreach (var message in _storage.Messages)
             {
                 if (message.SenderId == senderId && message.RecieverId == recieverId)
                 {
